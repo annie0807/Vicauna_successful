@@ -14,8 +14,11 @@ assert (
 from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--model_path", type=str, default="/home/quert/vicuna_13b_hf") # replaced with Vicuna checkpoints
-parser.add_argument("--lora_path", type=str, default="/home/quert/NetKUp/util/lora-Vicuna") # replaced with Vicuna+LoRA checkpoints
+# parser.add_argument("--model_path", type=str, default="/home/quert/vicuna_13b_hf") # replaced with Vicuna checkpoints
+# parser.add_argument("--lora_path", type=str, default="/home/quert/NetKUp/util/lora-Vicuna") # replaced with Vicuna+LoRA checkpoints
+parser.add_argument("--model_path", type=str, default="/home/anny_/NetKUp/FastChat/vicuna_13b") # replaced with Vicuna checkpoints
+parser.add_argument("--lora_path", type=str, default="/home/anny_/NetKUp/util/lora-Vicuna") # replaced with Vicuna+LoRA checkpoints
+
 parser.add_argument("--use_typewriter", type=int, default=1)
 parser.add_argument("--use_local", type=int, default=1)
 args = parser.parse_args()
@@ -53,15 +56,9 @@ except:
     pass
 
 if device == "cuda":
-    model = LlamaForCausalLM.from_pretrained(
-        BASE_MODEL,
-        load_in_8bit=LOAD_8BIT,
-        torch_dtype=torch.float16,
-        device_map={"": 0},
-    )
-    model = StreamPeftGenerationMixin.from_pretrained(
-        model, LORA_WEIGHTS, torch_dtype=torch.float16, device_map={"": 0}
-    )
+    model = LlamaForCausalLM.from_pretrained(BASE_MODEL,   load_in_8bit=LOAD_8BIT, torch_dtype=torch.float16,device_map={"": 0},)
+    model = StreamPeftGenerationMixin.from_pretrained( model, LORA_WEIGHTS, torch_dtype=torch.float16, device_map={"": 0})
+    # breakpoint()
 elif device == "mps":
     model = LlamaForCausalLM.from_pretrained(
         BASE_MODEL,
@@ -108,7 +105,7 @@ def generate_prompt(instruction, input=None):
 if not LOAD_8BIT:
     model.half()  # seems to fix bugs for some users.
 
-model.eval()
+# model.eval()
 if torch.__version__ >= "2" and sys.platform != "win32":
     model = torch.compile(model)
 
@@ -206,8 +203,10 @@ def evaluate(
 #     description="Code modified by theQuert",
 # ).queue().launch(share=True)
 
-inputs_df = pd.read_csv("/home/quert/NetKUp/dataset/prompts_paragraphs.csv")
+# breakpoint()
+# evaluate('how are you ')# /home/anny_/NetKUp/dataset/prompts_paragraphs.csv
+inputs_df = pd.read_csv("/home/anny_/NetKUp/dataset/prompts_paragraphs.csv")
 prompts_input = inputs_df.prompt.to_list()
 responses = [next(evaluate(prompts_input[idx])) for idx in range(len(prompts_input))]
-pd.DataFrame({"response": responses}).to_csv("/home/quert/NetKUp/generation/vicuna_13b_finetuned_as_decoder/outputs.csv")
+pd.DataFrame({"response": responses}).to_csv("/home/anny_/NetKUp/generation/vicuna_13b_finetuned_as_decoder/outputs.csv")
 

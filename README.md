@@ -30,3 +30,29 @@
 #### [Improving Wikipedia Verifiability with AI](https://ui.adsabs.harvard.edu/abs/2022arXiv220706220P)
 #### [Efficiently Summarizing Text and Graph Encodings of Multi-Document Clusters](https://aclanthology.org/2021.naacl-main.380)
 #### [Leveraging Locality in Abstractive Text Summarization](https://ui.adsabs.harvard.edu/abs/2022arXiv220512476L)
+
+## installation bug
+### en_core_web_sm installation error: 
+```
+pip install spacy
+python -m spacy download en_core_web_sm
+```
+https://newreleases.io/project/github/explosion/spacy-models/release/en_core_web_sm-2.3.1
+
+### files2rouge installation error: 
+   ```
+   pip install -U git+https://github.com/pltrdy/pyrouge
+   git clone https://github.com/pltrdy/files2rouge.git
+   cd files2rouge
+   python setup_rouge.py
+   pip install six
+   python setup_rouge.py
+   python setup.py install
+   ```
+
+### longformer and torch
+   install torch first
+   ```
+   pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+   pip install git+https://github.com/allenai/longformer.git
+   ```

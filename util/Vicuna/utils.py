@@ -743,6 +743,7 @@ class StreamPeftGenerationMixin(PeftModelForCausalLM, StreamGenerationMixin):
     @classmethod
     def from_pretrained(cls, model, model_id, **kwargs):
         # load the config
+        # breakpoint()
         config = LoraConfig.from_pretrained(model_id)
 
         if getattr(model, "hf_device_map", None) is not None:
@@ -763,12 +764,10 @@ class StreamPeftGenerationMixin(PeftModelForCausalLM, StreamGenerationMixin):
                     f"Please check that the file {'adapter_model.bin'} is present at {model_id}."
                 )
 
-        adapters_weights = torch.load(
-            filename,
-            map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
-        )
+        adapters_weights = torch.load( filename,map_location=torch.device("cuda" if torch.cuda.is_available() else "cpu"),)
         # load the weights into the model
         model = set_peft_model_state_dict(model, adapters_weights)
+        # breakpoint()
         if getattr(model, "hf_device_map", None) is not None:
             device_map = kwargs.get("device_map", "auto")
             max_memory = kwargs.get("max_memory", None)
@@ -788,10 +787,12 @@ class StreamPeftGenerationMixin(PeftModelForCausalLM, StreamGenerationMixin):
                 )
             model = dispatch_model(model, device_map=device_map)
             hook = AlignDevicesHook(io_same_device=True)
-            if model.peft_config.peft_type == PeftType.LORA:
-                add_hook_to_module(model.base_model.model, hook)
-            else:
-                remove_hook_from_submodules(model.prompt_encoder)
-                add_hook_to_module(model.base_model, hook)
+            # breakpoint()
+            add_hook_to_module(model.base_model.model, hook)
+            # if model.peft_config.peft_type == PeftType.LORA:
+            #     add_hook_to_module(model.base_model.model, hook)
+            # else:
+            #     remove_hook_from_submodules(model.prompt_encoder)
+            #     add_hook_to_module(model.base_model, hook)
         return model
 

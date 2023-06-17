@@ -15,7 +15,8 @@ cycler==0.11.0
 cymem==2.0.7
 datasets==1.6.2
 dill==0.3.6
-en-core-web-sm==2.3.1
+spacy==2.3.3
+# en-core-web-sm==2.3.1
 filelock==3.8.0
 files2rouge==2.1.0
 fonttools==4.38.0
@@ -31,7 +32,7 @@ imageio==2.22.4
 importlib-metadata==5.0.0
 joblib==1.2.0
 kiwisolver==1.4.4
-longformer==0.1
+# longformer==0.1
 Markdown==3.4.1
 MarkupSafe==2.1.1
 matplotlib==3.6.2
@@ -68,7 +69,6 @@ rsa==4.9
 sacremoses==0.0.53
 sentencepiece==0.1.97
 six==1.16.0
-spacy==2.3.3
 srsly==1.0.6
 tensorboard==2.11.0
 tensorboard-data-server==0.6.1
@@ -77,10 +77,10 @@ tensorboardX==2.5.1
 test-tube==0.7.5
 thinc==7.4.6
 tokenizers==0.8.1rc2
-torch==1.13.0+cu116
-torchaudio==0.13.0+cu116
-torchmetrics==0.5.0
-torchvision==0.14.0+cu116
+# torch==1.13.0+cu116
+# torchaudio==0.13.0+cu116
+# torchmetrics==0.5.0
+# torchvision==0.14.0+cu116
 tqdm==4.49.0
 transformers==3.1.0
 typing-extensions==4.4.0

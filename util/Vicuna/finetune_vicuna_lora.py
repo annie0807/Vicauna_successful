@@ -24,9 +24,11 @@ from peft import (
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--wandb", action="store_true", default=False)
-parser.add_argument("--data_path", type=str, default="/home/quert/NetKUp/dataset/vicuna_inputs/merge.json") # our custom data
-parser.add_argument("--output_path", type=str, default="lora-Vicuna") # the output path for finetued weights
-parser.add_argument("--model_path", type=str, default="/home/quert/vicuna_13b_hf/") # the path for pretrained model
+# parser.add_argument("--data_path", type=str, default="/home/quert/NetKUp/dataset/vicuna_inputs/merge.json") # our custom data
+parser.add_argument("--data_path", type=str, default="/home/anny_/NetKUp/dataset/finetuned_json/merge_new.json") # our custom data
+parser.add_argument("--output_path", type=str, default="/home/anny_/NetKUp/util/lora-Vicuna") # the output path for finetued weights
+parser.add_argument("--model_path", type=str, default="/home/anny_/NetKUp/FastChat/vicuna_13b/") # the path for pretrained model
+# /home/anny_/NetKUp/FastChat/vicuna_13b/config.json
 parser.add_argument("--eval_steps", type=int, default=200)
 parser.add_argument("--save_steps", type=int, default=200)
 parser.add_argument("--test_size", type=int, default=200)
@@ -42,7 +44,7 @@ MICRO_BATCH_SIZE = 4  # this could actually be 5 but i like powers of 2
 BATCH_SIZE = 128
 MAX_STEPS = None
 GRADIENT_ACCUMULATION_STEPS = BATCH_SIZE // MICRO_BATCH_SIZE
-EPOCHS = 3  # we don't always need 3 tbh
+EPOCHS = 1  # we don't always need 3 tbh
 LEARNING_RATE = 3e-4  # the Karpathy constant
 CUTOFF_LEN = 256  # 256 accounts for about 96% of the data
 LORA_R = 8
@@ -241,12 +243,12 @@ trainer = transformers.Trainer(
     args=transformers.TrainingArguments(
         per_device_train_batch_size=MICRO_BATCH_SIZE,
         gradient_accumulation_steps=GRADIENT_ACCUMULATION_STEPS,
-        warmup_steps=100,
+        warmup_steps=1,
         num_train_epochs=EPOCHS,
         max_steps=MAX_STEPS,
         learning_rate=LEARNING_RATE,
         fp16=True,
-        logging_steps=20,
+        logging_steps=1,
         evaluation_strategy="steps" if VAL_SET_SIZE > 0 else "no",
         save_strategy="steps",
         eval_steps=args.eval_steps if VAL_SET_SIZE > 0 else None,
